@@ -17,11 +17,11 @@ The script:
 
 -   **ICSim** (Instrument Cluster Simulator)
 -   **can-utils** (for `candump`, `canplayer`, `cangen`)
--   Python > 3.10 
+-   Python >= 3.10
 
 ### Python Libraries:
 
-Ensure the following Python libraries are installed before running the script
+Ensure the following Python libraries are installed before running the script:
 
 `pip install python-can` 
 
@@ -36,15 +36,15 @@ Before running the Python script, you'll need to generate CAN traffic and log it
     `./icsim vcan0` 
     
     Optionally, you can run `controls`:
-    
+
     `./controls vcan0` 
     
 2.  **Generate traffic** using `cangen` on the CAN bus.
-    
+   
     `cangen vcan0` 
     
 3.  **Log the CAN traffic** using `candump`, and stop the logging when you observe the signal you’re looking for.
-    
+   
     `candump vcan0 > signal_log.log` 
     
     -   Make sure to save the log immediately after the signal appears.
@@ -53,7 +53,7 @@ Before running the Python script, you'll need to generate CAN traffic and log it
 ### Step 2: Configure the Python Script
 
 -   Edit the Python script to point to your generated CAN log file (`signal_log.log`):
-    
+   
     `log_file_path = "/path/to/your/signal_log.log"` 
     
 
@@ -62,7 +62,7 @@ Before running the Python script, you'll need to generate CAN traffic and log it
 1.  Ensure that **ICSim** is in the foreground and locked on top of other windows, as the script will replay the log and watch for signal changes visually.
     
 2.  Run the Python script:
-    
+  
     `python3 detect_signal.py` 
     
     The script will:
@@ -76,20 +76,19 @@ Before running the Python script, you'll need to generate CAN traffic and log it
 
 After running the script, the terminal will display the packets that caused the signal, similar to the following:
 
-objectivec
-
-Copy code
-
-`Packets responsible for the signal:
-[<CAN Packet 1>, <CAN Packet 2>, ...]` 
+`Change detected with line: 
+(1544106680.228086) can0 67E#01C65274D19FAC6D
+` 
 
 ### Step 4: Analyze the Results
 
 Use the identified packets for further analysis, modifications, or debugging in ICSim.
+You can send it with `cansend`
 
 ----------
 
 ## Troubleshooting
 
--   **ICSim not responding**: Make sure ICSim is running in the foreground, as the script interacts with the visual elements.
+-   **Script instantly stopping**: Make sure ICSim is running in the foreground, as the script interacts with the visual elements.
 -   **No signal detected**: Ensure that the CAN log file contains the correct traffic and that the signal is clearly visible.
+-  **Inacurate gueses**:  You can/should tweak screenshots intervals or threshold at the start of the file. It might depend on your specs. You could also put the number of lines to keep higher, as it is when the "slow and precise" scan starts
